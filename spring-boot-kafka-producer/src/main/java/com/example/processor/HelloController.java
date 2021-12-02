@@ -6,15 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.processor.model.User;
+
 @RestController
 public class HelloController {
 
 	@Autowired
-	KafkaTemplate<String, String> kafkaTemplate;
+	KafkaTemplate<String, User> kafkaTemplate;
 	
-	@GetMapping("/hello/{message}")
-	public String publish(@PathVariable("message") String publishMessage) {
-		kafkaTemplate.send("hello-topic", publishMessage);
-		return "message published : "+publishMessage;
+	
+	@GetMapping("/hello/{name}")
+	public String publish(@PathVariable("name") String name) {
+		kafkaTemplate.send("hello-topic", new User(name,"dev"));
+		return "message published !";
 	}
 }
